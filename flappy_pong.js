@@ -198,13 +198,14 @@ function wallAdder() {
   if (millis() - lastAddTime > wallInterval) {
     let randHeight = round(random(minGapHeight, maxGapHeight));
     let randY = round(random(0, height - randHeight));
-    
-    // (gapWallX, gapWallY, gapWallWidth, gapWallHeight)
-    let randWall = [width, randY, wallWidth, randHeight, 0];
+    let randColor = color(random(255), random(255), random(255));
+    let randWall = [width, randY, wallWidth, randHeight, 0, randColor];
+
     walls.push(randWall);
     lastAddTime = millis();
   }
 }
+
 
 function wallHandler() {
   // iterate backwards to allow safe removal
@@ -218,19 +219,22 @@ function wallHandler() {
 
 function wallDrawer(index) {
   let wall = walls[index];
-  // get gap wall settings
+
   let gapWallX = wall[0];
   let gapWallY = wall[1];
   let gapWallWidth = wall[2];
   let gapWallHeight = wall[3];
-  // draw actual walls
+  let col = wall[5]; 
+
   rectMode(CORNER);
-  fill(wallColors);
-  // top wall with rounded bottom-right/left corners
+  fill(col);  
+
   rect(gapWallX, 0, gapWallWidth, gapWallY, 0, 0, wallRadius, wallRadius);
-  // bottom wall with rounded top-left/top-right corners
-  rect(gapWallX, gapWallY + gapWallHeight, gapWallWidth, height - (gapWallY + gapWallHeight), wallRadius, wallRadius, 0, 0);
+
+  rect(gapWallX, gapWallY + gapWallHeight, gapWallWidth, height - (gapWallY + gapWallHeight), 
+       wallRadius, wallRadius, 0, 0);
 }
+
 
 function wallMover(index) {
   walls[index][0] -= wallSpeed;
